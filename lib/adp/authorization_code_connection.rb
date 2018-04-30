@@ -69,7 +69,7 @@ module Adp
           end
         end
 
-        Log.debug("connection configutration: #{self.connection_configuration.inspect}")
+        #Log.debug("connection configutration: #{self.connection_configuration.inspect}")
 
         data = {
             "client_id" => self.connection_configuration.clientID,
@@ -80,7 +80,7 @@ module Adp
         };
 
         result = send_web_request(self.connection_configuration.tokenServerURL, data, connection_configuration.authorization)
-        
+
         if result["error"].nil? then
           token = AccessToken.new(result)
         else
@@ -88,7 +88,7 @@ module Adp
           raise ConnectionException, "Connection error: #{result["error"]} #{result['error_description']}"
         end
 
-        Log.debug("Results from request was #{result}");
+        #Log.debug("Results from request was #{result}");
 
         token
       end
