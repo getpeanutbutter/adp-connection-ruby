@@ -80,7 +80,7 @@ module Adp
                 "grant_type" => self.connection_configuration.grantType
             };
 
-            result = send_web_request(self.connection_configuration.tokenServerURL, data );
+            result = JSON.parse(send_web_request(self.connection_configuration.tokenServerURL, data ).body);
 
             if result["error"].nil? then
               token = AccessToken.new(result)
@@ -143,13 +143,16 @@ module Adp
                 http.cert_store.add_file(self.connection_configuration.sslCaPath)
             end
 
-            if method.eql?('POST')
+            case method
+            when 'POST'
               request = Net::HTTP::Post.new(uri.request_uri)
               if content_type.eql?('application/json')
                 request.body = JSON.generate(data)
               else
                 request.set_form_data( data );
               end
+            when 'DELETE'
+              request = Net::HTTP::Delete.new(uri.request_uri)
             else
               request = Net::HTTP::Get.new(uri.request_uri)
             end
@@ -161,7 +164,8 @@ module Adp
             # add credentials if available
             request["Authorization"] = authorization unless authorization.nil?
 
-            response = JSON.parse(http.request(request).body)
+            response = http.request(request)
+            response
         end
     end
   end

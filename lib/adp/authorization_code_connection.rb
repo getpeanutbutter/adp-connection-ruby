@@ -79,7 +79,7 @@ module Adp
             "redirect_uri" => self.connection_configuration.redirectURL
         };
 
-        result = send_web_request(self.connection_configuration.tokenServerURL, data, connection_configuration.authorization)
+        result = JSON.parse(send_web_request(self.connection_configuration.tokenServerURL, data, connection_configuration.authorization).body)
 
         if result["error"].nil? then
           token = AccessToken.new(result)
