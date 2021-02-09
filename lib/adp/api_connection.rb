@@ -145,7 +145,11 @@ module Adp
 
             if method.eql?('POST')
               request = Net::HTTP::Post.new(uri.request_uri)
-              request.set_form_data( data );
+              if content_type.eql?('application/json')
+                request.body = JSON.generate(data)
+              else
+                request.set_form_data( data );
+              end
             else
               request = Net::HTTP::Get.new(uri.request_uri)
             end

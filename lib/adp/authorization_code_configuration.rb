@@ -11,12 +11,14 @@ module Adp
       attr_accessor :responseType
       attr_accessor :scope
       attr_accessor :state
+      attr_accessor :authorization
 
 
       def initialize( config )
 
           super
 
+          self.authorization = config["authorization"]
           self.authorizationCode = config["authorizationCode"]
           self.baseAuthorizationURL = config["baseAuthorizationURL"]
           self.redirectURL = config["redirectURL"]
